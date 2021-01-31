@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
@@ -7,6 +8,7 @@ import { GetEnumKeyByEnumValue } from '../shared/helpers/enum.helper';
 import { SelectOption } from '../shared/interface/selectOption';
 import { MessageService } from '../shared/services/message.service';
 import { TalkMorePlan } from '../shared/utils/enum';
+import { DetailModalComponent } from './detail-modal/detail-modal.component';
 import { RequestModel } from './models/requestModel';
 import { TalkRequestsService } from './talk-requests.service';
 
@@ -38,7 +40,8 @@ export class TalkRequestsComponent implements OnInit {
     private fb: FormBuilder,
     private coolDialogs: NgxCoolDialogsService,
     private talkRequestsService: TalkRequestsService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private detailModalComonent: DetailModalComponent) { }
 
   ngOnInit(): void {
     this.GetRequests();
@@ -162,7 +165,19 @@ export class TalkRequestsComponent implements OnInit {
   }
 
   onClickEdit(request: any, isEdit: boolean ){
-
+    this.detailModalComonent.openDialog(request, isEdit);
   }
+
+  // onClickEdit(request: any, isEdit: boolean): void {
+  //   this.dialog.open(DetailModalComponent, {
+  //     width: '100%',
+  //     data: {request, isEdit}
+  //   });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.animal = result;
+    // });
+  // }
 
 }
