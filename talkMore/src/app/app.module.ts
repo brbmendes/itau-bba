@@ -34,6 +34,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
 import { NgxMaskModule } from 'ngx-mask'
 
 import { AppRoutingModule } from './app-routing.module';
@@ -44,6 +47,8 @@ import { TalkRequestsComponent } from './talk-requests/talk-requests.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { NewRequestsComponent } from './talk-requests/new-requests/new-requests.component';
 import { MyRequestsComponent } from './talk-requests/my-requests/my-requests.component';
+
+registerLocaleData(localePt);
 
 @NgModule({
 	declarations: [
