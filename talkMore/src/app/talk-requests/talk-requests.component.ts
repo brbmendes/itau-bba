@@ -5,16 +5,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { GetEnumKeyByEnumValue } from '../shared/helpers/enum.helper';
 import { SelectOption } from '../shared/interface/selectOption';
+import { MessageService } from '../shared/services/message.service';
 import { TalkMorePlan } from '../shared/utils/enum';
-import { RequestsModel } from './models/requestsModel';
+import { RequestModel } from './models/requestModel';
 import { TalkRequestsService } from './talk-requests.service';
 
-const ELEMENT_DATA: RequestsModel[] = [
-  { id: 1421, company: 'Giovanni Sarao Araki ME', cnpj: '56874597000198', plan: TalkMorePlan['FaleMais 60'], tariff: 150.50, minutes: 100, planValue: 590.80, accessionDate: new Date(2020, 7, 15), sendDate: new Date(2020, 7, 1) },
-  { id: 1420, company: 'Vitor Takara EPP', cnpj: '65498480000198', plan: TalkMorePlan['FaleMais 30'], tariff: 80.80, minutes: 50, planValue: 420.15, accessionDate: new Date(2020, 3, 3), sendDate: new Date(2020, 5, 24) },
-  { id: 1419, company: 'Augustinho Celestino LTDA', cnpj: '48558485000197', plan: TalkMorePlan['FaleMais 120'], tariff: 800.80, minutes: 300, planValue: 987.26, accessionDate: new Date(2020, 6, 5), sendDate: new Date(2020, 4, 24) },
-  
-];
 @Component({
   selector: 'app-talk-requests',
   templateUrl: './talk-requests.component.html',
@@ -22,11 +17,12 @@ const ELEMENT_DATA: RequestsModel[] = [
 })
 export class TalkRequestsComponent implements OnInit {
   _talkMorePlan: SelectOption[] = this.getTalkMorePlans();
-  
-  displayedColumns: string[] = ['id', 'company', 'plan', 'tariff', 'minutes', 'planValue', 'accessionDate', 'sendDate', 'action'];
-    dataSource = new MatTableDataSource<RequestsModel>(ELEMENT_DATA);
+  _matDataSource: RequestModel[] = []
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['id', 'company', 'plan', 'tariff', 'minutes', 'planValue', 'accessionDate', 'sendDate', 'action'];
+  dataSource = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   newRequestForm = this.fb.group({
     company: [null, Validators.required],
@@ -37,13 +33,15 @@ export class TalkRequestsComponent implements OnInit {
     planValue: [null, Validators.required],
     accessionDate: [null, Validators.required],
   });
-  
+
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private coolDialogs: NgxCoolDialogsService,
-    private talkRequestsService: TalkRequestsService) { }
+    private talkRequestsService: TalkRequestsService,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.GetRequests();
   }
 
   ngAfterViewInit() {
@@ -54,75 +52,117 @@ export class TalkRequestsComponent implements OnInit {
     return minutes.toString() + ' min';
   }
 
-  getPlan(planId: number): string {
-    let key = "";
+  // getPlan(planId: number): string {
+  //   let key = "";
+  //   Object.keys(TalkMorePlan).forEach((element) => {
+  //     // debugger;
+  //     if (isNaN(Number(element)) === false && Number(element) === planId) {
+  //       key = GetEnumKeyByEnumValue(TalkMorePlan, element);
+  //     }
+  //   })
+  //   return key;
+  // }
+
+  getTalkMorePlans() {
+    let array: SelectOption[] = [];
     Object.keys(TalkMorePlan).forEach((element) => {
-			if (isNaN(Number(element)) === false && Number(element) === planId) {
-         key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-			}
+      if (isNaN(Number(element)) === false) {
+        var key = GetEnumKeyByEnumValue(TalkMorePlan, element);
+        let plan: SelectOption = { value: element, label: key };
+        array.push(plan);
+      }
     })
-    return key;
+    return array;
+  }
+
+  ConfirmAction(message: string, action) {
+    this.coolDialogs.confirm(message)
+      .subscribe(response => {
+        if (response) {
+          action();
+        }
+      });
   }
 
   onSubmit() {
     if (this.newRequestForm.valid) {
-      this.ConfirmAction("Deseja confirmar a operação?", () => this.saveRequest());
-		}
+      this.ConfirmAction("Deseja confirmar a operação?", () => this.SaveRequest());
+    }
   }
 
-  ConfirmAction(message: string, action) {
-		this.coolDialogs.confirm(message)
-			.subscribe(response => {
-				if (response) {
-					action();
-				}
-			});
-  }
-  
-  saveRequest(): void {
-    var request: RequestsModel = {
-        id: 1,
-        company: this.newRequestForm.controls.company.value,
+  SaveRequest(): void {
+    this.talkRequestsService.GetRequests().subscribe((requests: any[]) => {
+      let maxId = Math.max.apply(Math, requests.map(function(o) { return o.id; }))
+      
+      if(Number(maxId) === 0 || maxId === null || maxId === undefined){
+        maxId = 1;
+      }
+      else {
+        maxId += 1;
+      }
+
+      var request: RequestModel = {
+        id: maxId,
+        empresa: this.newRequestForm.controls.company.value,
         cnpj: this.newRequestForm.controls.cnpj.value,
-        plan: this.newRequestForm.controls.plan.value,
-        tariff: this.newRequestForm.controls.tariff.value,
-        minutes: this.newRequestForm.controls.minutes.value,
-        planValue: this.newRequestForm.controls.planValue.value,
-        accessionDate: new Date(this.newRequestForm.controls.accessionDate.value),
-        sendDate: new Date(),
-    };
-    
-    let resp = this.talkRequestsService.SaveRequest(request);
-    this.talkRequestsService.SaveRequest(request).subscribe((response) => {
-      if (response) {
-        // this.solicitacoes.push(this.solicitacao);
-        // this.alertService.show('Solicitação cadastrada com sucesso', 3);
-        // this.solicitacao = {};
-        let respo = this.getRequests();
-        var a = 2;
+        plano: this.newRequestForm.controls.plan.value,
+        tarifa: this.newRequestForm.controls.tariff.value,
+        minutos: this.newRequestForm.controls.minutes.value,
+        vplano: this.newRequestForm.controls.planValue.value,
+        dateAdesao: new Date(this.newRequestForm.controls.accessionDate.value),
+        dateEmissao: new Date(),
+      };
+
+      this.talkRequestsService.SaveRequest(request).subscribe((response) => {
+        if (response) {
+          this.messageService.showMessage('Solicitação cadastrada com sucesso', 3);
+          this.GetRequests();
+        }
+      });
+    });
+  }
+
+  GetRequests() {
+    this.talkRequestsService.GetRequests().subscribe((requests: any[]) => {
+      this._matDataSource = [];
+      requests.forEach((element) => {
+        let tableLine: RequestModel = {
+          _id: element._id,
+          cnpj: element.cnpj,
+          dateAdesao: element.dateAdesao,
+          dateEmissao: element.dateEmissao,
+          empresa: element.empresa,
+          minutos: element.minutos,
+          plano: element.plano,
+          tarifa: element.tarifa,
+          vplano: element.vplano,
+          id: element.id,
+
+        }
+        this._matDataSource.push(tableLine);
+      });
+      this.dataSource = new MatTableDataSource<RequestModel>(this._matDataSource);
+    });
+  }
+
+  onClickDelete(request: any) {
+    this.ConfirmAction("Deseja confirmar a operação?", () => this.DeleteRequest(request._id));
+  }
+
+  DeleteRequest(requestId: string){
+    this.talkRequestsService.DeleteRequest(requestId).subscribe((response) => {
+      if(response){
+        this.messageService.showMessage('Solicitação removida com sucesso', 3);
+        this.GetRequests();
+      }
+      else {
+        this.messageService.showMessage('Falha ao remover solicitação. Por favor tente novamente', 3);
       }
     });
-    
   }
 
-  getRequests(){
-    this.talkRequestsService.GetRequests().subscribe((requests: any[]) => {
-      var a = requests;
-      var b = 2;
-      // this.myRequests.dataSource = solicitacoes;
-    });
-  }
-  
-  getTalkMorePlans(){
-    let array: SelectOption[] = [];
-		Object.keys(TalkMorePlan).forEach((element) => {
-			if (isNaN(Number(element)) === false) {
-				var key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-				let plan: SelectOption = { value: element, label: key };
-				array.push(plan);
-			}
-		})
-		return array;
+  onClickEdit(request: any, isEdit: boolean ){
+
   }
 
 }
