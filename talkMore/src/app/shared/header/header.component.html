@@ -1,1 +1,30 @@
-<p>header works!</p>
+<mat-toolbar>
+  <mat-toolbar-row class="menu-nav-header">
+    <a [routerLink]="['/']">
+      <img class="logo-itau-bba" src="../../../assets/img/logo_itau_bba.png" />
+    </a>
+    <div fxLayout="row" fxFlexOffset="58">
+      <div fxLayoutAlign="center center">
+        <button mat-button (click)="showAjuda()">
+          <mat-icon>help_outline</mat-icon> ajuda
+        </button>
+        <mat-divider [vertical]="true"></mat-divider>
+      </div>
+      <div class='menu-circle'>
+        <div class="menu-profile-circle">
+          AP
+        </div>
+        <div class="menu-user">
+          <label class="menu-user-title">Alfred Pennyworth</label>
+          <label class="menu-user-sub-title">Wayne Enterprises</label>
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon class="arrowAlign">keyboard_arrow_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Logout</button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -1,0 +1,54 @@
+@import '../../../styles'
+
+.menu-nav-header
+    background: $backgroundMenu
+    position: fixed
+    width: 100%
+    height: 90px
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2)
+    color: $black
+    z-index: 10
+    display: flex
+    align-items: center
+    top: 0
+    padding-botton: 20px
+
+.logo-itau-bba
+    width: 60%
+    margin-top: 20px
+    margin-bottom: 10px
+    margin-left: 10px
+
+.mat-divider
+    height: 100%
+
+.menu-circle
+    margin: 0 5%
+    display: flex
+     
+.menu-profile-circle
+    outline: none
+    width: 65px
+    height: 55px
+    border-radius: 50px
+    font-size: clamp(0.3em, 1em, 2em)
+    border: 0.5px solid $profileCircleColor
+    color: $white
+    background-color: $profileCircleColor
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3)
+    text-align: center
+    display: flex
+    justify-content: center
+    align-items: center
+
+.menu-user
+    margin: 2.5%
+    line-height: normal
+    margin-top: 4%
+    .menu-user-title
+        display: block
+        font-size: medium
+    .menu-user-sub-title
+        display: block
+        font-size: small
+        color: $subtitleMenuUserColor
