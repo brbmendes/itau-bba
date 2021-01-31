@@ -27,7 +27,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -110,7 +110,10 @@ registerLocaleData(localePt);
 			}
 		  }),
 	],
-	providers: [{provide: LOCALE_ID, useValue: 'pt-br'}],
+	providers: [
+		{provide: LOCALE_ID, useValue: 'pt-br'},
+		{ provide: MAT_DIALOG_DATA, useValue: {} },
+		{ provide: MatDialogRef, useValue: {} }],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

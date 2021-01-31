@@ -9,6 +9,8 @@ import { Injectable } from '@angular/core';
 export class TalkRequestsService {
     private _route: string;
     private _headerOptions: HttpHeaders;
+    private _pageMode: string;
+    private _requestData: any
 
     constructor(private http: HttpClient) {
         this._route = Config.GetUrlItauTalkMore();

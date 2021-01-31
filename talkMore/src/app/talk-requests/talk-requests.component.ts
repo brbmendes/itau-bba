@@ -41,7 +41,8 @@ export class TalkRequestsComponent implements OnInit {
     private coolDialogs: NgxCoolDialogsService,
     private talkRequestsService: TalkRequestsService,
     private messageService: MessageService,
-    private detailModalComonent: DetailModalComponent) { }
+    private detailModalComonent: DetailModalComponent,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.GetRequests();
@@ -55,23 +56,12 @@ export class TalkRequestsComponent implements OnInit {
     return minutes.toString() + ' min';
   }
 
-  // getPlan(planId: number): string {
-  //   let key = "";
-  //   Object.keys(TalkMorePlan).forEach((element) => {
-  //     // debugger;
-  //     if (isNaN(Number(element)) === false && Number(element) === planId) {
-  //       key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-  //     }
-  //   })
-  //   return key;
-  // }
-
   getTalkMorePlans() {
     let array: SelectOption[] = [];
     Object.keys(TalkMorePlan).forEach((element) => {
       if (isNaN(Number(element)) === false) {
         var key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-        let plan: SelectOption = { value: element, label: key };
+        let plan: SelectOption = { value: key, label: key };
         array.push(plan);
       }
     })
@@ -164,20 +154,10 @@ export class TalkRequestsComponent implements OnInit {
     });
   }
 
-  onClickEdit(request: any, isEdit: boolean ){
-    this.detailModalComonent.openDialog(request, isEdit);
+  onClickDetails(request: any, isEdit: boolean ){
+    const dialogRef = this.dialog.open(DetailModalComponent, {
+      data: { isEdit, request },
+      width: '100%'
+    });
   }
-
-  // onClickEdit(request: any, isEdit: boolean): void {
-  //   this.dialog.open(DetailModalComponent, {
-  //     width: '100%',
-  //     data: {request, isEdit}
-  //   });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
-  // }
-
 }

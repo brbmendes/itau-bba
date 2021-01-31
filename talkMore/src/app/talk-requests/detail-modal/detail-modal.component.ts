@@ -1,15 +1,11 @@
-import { Component, Injectable, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, EventEmitter, Inject, Injectable, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GetEnumKeyByEnumValue } from 'src/app/shared/helpers/enum.helper';
 import { SelectOption } from 'src/app/shared/interface/selectOption';
 import { TalkMorePlan } from 'src/app/shared/utils/enum';
-
-export interface DialogData {
-  animal: string;
-  name: string;
-
-}
+import { RequestModel } from '../models/requestModel';
+import { TalkRequestsService } from '../talk-requests.service';
 
 @Injectable({
   providedIn: "root"
@@ -21,45 +17,55 @@ export interface DialogData {
   styleUrls: ['./detail-modal.component.sass']
 })
 export class DetailModalComponent implements OnInit {
-
-  animal: string;
-  name: string;
   _talkMorePlan: SelectOption[] = this.getTalkMorePlans();
+  @Input() requestForm: FormGroup = this.fb.group({
+    empresa: this.fb.control(null),
+    cnpj: this.fb.control(null),
+    plano: this.fb.control(null),
+    tarifa: this.fb.control(null),
+    minutos: this.fb.control(null),
+    vplano: this.fb.control(null),
+    dateAdesao: this.fb.control(null),
+    dateEmissao: this.fb.control(null),
+  });;
 
-  newRequestForm = this.fb.group({
-    company: [null, Validators.required],
-    cnpj: [null, Validators.required],
-    plan: [null, Validators.required],
-    tariff: [null, Validators.required],
-    minutes: [null, Validators.required],
-    planValue: [null, Validators.required],
-    accessionDate: [null, Validators.required],
-  });
-  
-  constructor(public dialog: MatDialog, 
-    private fb: FormBuilder) { }
+
+  constructor(
+    private fb: FormBuilder,
+    private talkMoreService: TalkRequestsService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<DetailModalComponent>,) { }
 
   ngOnInit(): void {
+    
+    
   }
 
-  openDialog(request: any, isEdit: boolean): void {
-    this.dialog.open(DetailModalComponent, {
-      width: '100%',
-      data: {request, isEdit}
-    });
+  openDialog(request: any, isEdit: string): void {
+    
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
+    this.requestForm.controls.empresa.patchValue(request.empresa);
+    // this.requestForm.controls.cnpj.setValue(request.cnpj);
+    // this.requestForm.controls.plano.setValue(request.plano);
+    // this.requestForm.controls.tarifa.setValue(request.tarifa);
+    // this.requestForm.controls.minutos.setValue(request.minutos);
+    // this.requestForm.controls.vplano.setValue(request.vplano);
+    // this.requestForm.controls.dateAdesao.setValue(request.dateAdesao);
+    // this.requestForm.controls.dateEmissao.setValue(request.dateEmissao);
+
+    // this.dialog.open(DetailModalComponent, {
+    //   width: '100%',
+    //   data: { request, isEdit }
     // });
+    
   }
 
-  onNoClick(): void {
-    this.dialog.closeAll();
+  onClose(): void {
+    this.dialogRef.close();
   }
 
-  onSave(){
-
+  getPlano(){
+    return "eas";
   }
 
   getTalkMorePlans() {
@@ -73,9 +79,4 @@ export class DetailModalComponent implements OnInit {
     })
     return array;
   }
-
-  onSubmit(){
-    console.log('eita')
-  }
-      
 }
