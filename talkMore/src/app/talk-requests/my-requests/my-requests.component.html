@@ -10,12 +10,12 @@
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
         <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> Id </th>
+            <th mat-header-cell *matHeaderCellDef class="tableFontHeader"> Id </th>
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
         <ng-container matColumnDef="company">
-            <th mat-header-cell *matHeaderCellDef> Empresa </th>
+            <th mat-header-cell *matHeaderCellDef class="tableFontHeader"> Empresa </th>
             <td mat-cell *matCellDef="let element">
                 <label class="table-item-title">{{element.company}}</label><br>
                 <label class="table-item-subtitle">CNPJ: {{element.cnpj  | mask: '00.000.000/0000-00'}}</label>
@@ -23,37 +23,37 @@
         </ng-container>
 
         <ng-container matColumnDef="plan">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Plano </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Plano </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{this.getPlan(element.plan)}} </td>
         </ng-container>
 
         <ng-container matColumnDef="tariff">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Tarifa </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Tarifa </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{element.tariff | currency: 'BRL'}}  </td>
         </ng-container>
 
         <ng-container matColumnDef="minutes">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Minutos </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Minutos </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{this.getMinutes(element.minutes)}} </td>
         </ng-container>
 
         <ng-container matColumnDef="planValue">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Valor do plano </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Valor do plano </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{element.planValue | currency: 'BRL'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="accessionDate">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Data de adesão </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Data de adesão </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{element.accessionDate | date: 'shortDate'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="sendDate">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Data de adesão </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Data de adesão </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> {{element.sendDate | date: 'shortDate'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader"> Ação </th>
+            <th mat-header-cell *matHeaderCellDef class="tableAlignHeader tableFontHeader"> Ação </th>
             <td mat-cell *matCellDef="let element" class="tableAlignCell tableColorCell"> <button mat-button
                     [matMenuTriggerFor]="menuActions">{{element.action}}</button> </td>
         </ng-container>

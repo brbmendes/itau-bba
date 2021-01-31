@@ -46,7 +46,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="15">
                 <mat-label>Minutos</mat-label>
-                <input matInput placeholder="" formControlName="minutes" suffix=" minutos" mask="000000000">
+                <input matInput placeholder="" formControlName="minutes" suffix=" minuto(s)" mask="999999">
                 <mat-error *ngIf="newRequestForm.controls['minutes'].hasError('required')">
                     Minutos é <strong>obrigatório</strong>
                 </mat-error>

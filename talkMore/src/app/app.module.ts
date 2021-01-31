@@ -36,8 +36,8 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-
 import { NgxMaskModule } from 'ngx-mask'
+import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -57,7 +57,7 @@ registerLocaleData(localePt);
 		TalkRequestsComponent,
 		HeaderComponent,
 		NewRequestsComponent,
-		MyRequestsComponent
+		MyRequestsComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -98,6 +98,17 @@ registerLocaleData(localePt);
 		MatPaginatorModule,
 		FlexLayoutModule,
 		NgxMaskModule.forRoot(),
+		NgxCoolDialogsModule.forRoot({
+			theme: "default",
+			okButtonText: "Sim",
+			cancelButtonText: "Não",
+			color: "#EC7000",
+			titles: {
+			  alert: "Atenção!",
+			  confirm: "Confirmar",
+			  prompt: "Informe"
+			}
+		  }),
 	],
 	providers: [{provide: LOCALE_ID, useValue: 'pt-br'}],
 	bootstrap: [AppComponent]

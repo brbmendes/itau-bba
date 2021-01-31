@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { GetEnumKeyByEnumValue } from 'src/app/shared/helpers/enum.helper';
 import { SelectOption } from 'src/app/shared/interface/selectOption';
 import { TalkMorePlan } from 'src/app/shared/utils/enum';
@@ -22,13 +23,28 @@ export class NewRequestsComponent implements OnInit {
     accessionDate: [null, Validators.required],
   });
   
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private coolDialogs: NgxCoolDialogsService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-		alert('Thanks!');
+    if (this.newRequestForm.valid) {
+      this.ConfirmAction("Deseja confirmar a operação?", () => this.saveRequest());
+		}
+  }
+
+  ConfirmAction(message: string, action) {
+		this.coolDialogs.confirm(message)
+			.subscribe(response => {
+				if (response) {
+					action();
+				}
+			});
+  }
+  
+  saveRequest(): void {
+    alert('eita');
   }
   
   getTalkMorePlans(){
