@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -60,6 +61,7 @@ registerLocaleData(localePt);
 		MyRequestsComponent,
 	],
 	imports: [
+		HttpClientModule,
 		BrowserModule,
 		AppRoutingModule,
 		FormsModule,
