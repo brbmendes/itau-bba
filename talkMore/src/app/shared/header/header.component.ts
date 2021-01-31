@@ -19,6 +19,6 @@ export class HeaderComponent implements OnInit {
   }
 
   showAjuda(){
-    this.messageService.showMessage("Teste", 5);
+    this.messageService.showMessage("Para falar com o Itaú BBA, entre em contato no telefone 0800 570 0011", 5);
   }
 }
