@@ -1,48 +1,102 @@
-<h1 mat-dialog-title>Requisição</h1>
-<div mat-dialog-content>
-    <form [formGroup]="requestForm">
-        <div class="formLayout" fxLayout="row" fxLayoutGap="20px">
-            <mat-form-field fxFlex="22">
-                <mat-label>Empresa</mat-label>
-                <input matInput placeholder="" formControlName="empresa" [(ngModel)]="data.request.empresa" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-label>CNPJ</mat-label>
-                <input matInput placeholder="" formControlName="cnpj" mask="00.000.000/0000-00" [(ngModel)]="data.request.cnpj" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-label>Plano</mat-label>
-                <input matInput placeholder="" formControlName="plano" [(ngModel)]="data.request.plano" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="22">
-                <mat-label>Tarifa</mat-label>
-                <input matInput placeholder="" formControlName="tarifa" prefix="R$ " mask="separator.2"
-                    thousandSeparator="." [(ngModel)]="data.request.tarifa" readonly>
-            </mat-form-field>
-        </div>
-        <div class="formLayout" fxLayout="row" fxLayoutGap="20px">
-            <mat-form-field fxFlex="22">
-                <mat-label>Minutos</mat-label>
-                <input matInput placeholder="" formControlName="minutos" suffix=" minuto(s)" mask="999999" [(ngModel)]="data.request.minutos" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-label>Valor do plano</mat-label>
-                <input matInput placeholder="" formControlName="vplano" prefix="R$ " mask="separator.2"
-                    thousandSeparator="." [(ngModel)]="data.request.vplano" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-label>Data de Adesão</mat-label>
-                <input matInput type="date" placeholder="" formControlName="dateAdesao" [(ngModel)]="data.request.dateAdesao" readonly>
-            </mat-form-field>
-            <mat-form-field fxFlex="22">
-                <mat-label>Data de Envio</mat-label>
-                <input matInput type="date" placeholder="" formControlName="dateEmissao" [(ngModel)]="data.request.dateEmissao" readonly>
-            </mat-form-field>
-        </div>
-    </form>
-</div>
+<ng-container *ngIf="data.isEdit">
+    <h1 mat-dialog-title>Editar</h1>
+    <h3>Informe aqui alterações desejadas em sua solicitação</h3>
+</ng-container>
+<ng-container *ngIf="!data.isEdit">
+    <h1 mat-dialog-title>Detalhes</h1>
+    <h3>Visualize os detalhes de sua solicitação</h3>
+</ng-container>
+<mat-card class="mat-elevation-z0">
+    <div mat-dialog-content>
+        <form [formGroup]="_requestForm">
+            <div class="formLayout2" fxLayout="row" fxLayoutGap="20px">
+                <mat-form-field style="display: none;">
+                    <input matInput placeholder="" formControlName="_id">
+                    <input matInput placeholder="" formControlName="id">
+                </mat-form-field>
+                <mat-form-field fxFlex="22">
+                    <mat-label>Empresa</mat-label>
+                    <input matInput placeholder="" formControlName="empresa" [readonly]="!data.isEdit">
+                    <mat-error *ngIf="_requestForm.controls['empresa'].hasError('required')">
+                        Empresa é <strong>obrigatório</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <mat-label>CNPJ</mat-label>
+                    <input matInput placeholder="" formControlName="cnpj" mask="00.000.000/0000-00"
+                        [readonly]="!data.isEdit">
+                    <mat-error *ngIf="_requestForm.controls['cnpj'].hasError('required')">
+                        Cnpj é <strong>obrigatório</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <mat-label>Plano</mat-label>
+                    <ng-container *ngIf="data.isEdit">
+                        <mat-select formControlName="plano">
+                            <mat-option>Selecione</mat-option>
+                            <mat-option *ngFor="let plan of _talkMorePlan" [value]="plan">
+                                {{plan}}
+                            </mat-option>
+                        </mat-select>
+                    </ng-container>
+                    <ng-container *ngIf="!data.isEdit">
+                        <input matInput placeholder="" formControlName="plano" readonly>
+                    </ng-container>
+                    <mat-error *ngIf="_requestForm.controls['plano'].hasError('required')">
+                        Plano é <strong>obrigatório</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="22">
+                    <mat-label>Tarifa</mat-label>
+                    <input matInput placeholder="" formControlName="tarifa" prefix="R$ " mask="separator.2"
+                        thousandSeparator="." [readonly]="!data.isEdit">
+                    <mat-error *ngIf="_requestForm.controls['tarifa'].hasError('required')">
+                        Tarifa é <strong>obrigatória</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="formLayout2" fxLayout="row" fxLayoutGap="20px">
+                <mat-form-field fxFlex="22">
+                    <mat-label>Minutos</mat-label>
+                    <input matInput placeholder="" formControlName="minutos" suffix=" minuto(s)" mask="999999"
+                        [readonly]="!data.isEdit">
+                        <mat-error *ngIf="_requestForm.controls['minutos'].hasError('required')">
+                            Minutos é <strong>obrigatório</strong>
+                        </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <mat-label>Valor do plano</mat-label>
+                    <input matInput placeholder="" formControlName="vplano" prefix="R$ " mask="separator.2"
+                        thousandSeparator="." [readonly]="!data.isEdit">
+                        <mat-error *ngIf="_requestForm.controls['vplano'].hasError('required')">
+                            Valor do plano é <strong>obrigatório</strong>
+                        </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <mat-label>Data de Adesão</mat-label>
+                    <input matInput [matDatepicker]="pickerDateAdesao" placeholder="" formControlName="dateAdesao"
+                        [readonly]="!data.isEdit">
+                    <mat-datepicker-toggle matSuffix [for]="pickerDateAdesao">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerDateAdesao [disabled]="!data.isEdit"></mat-datepicker>
+                    <mat-error *ngIf="_requestForm.controls['dateAdesao'].hasError('required')">
+                        Data de adesão é <strong>obrigatória</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="22">
+                    <mat-label>Data de Envio</mat-label>
+                    <input matInput [matDatepicker]="pickerDateEmissao" placeholder="" formControlName="dateEmissao"
+                        readonly>
+                    <mat-datepicker-toggle matSuffix [for]="pickerDateEmissao">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerDateEmissao disabled></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+</mat-card>
 <div mat-dialog-actions>
-    <button mat-raised-button *ngIf="data.isEdit === false" class="btn-primary" (click)="onClose()" >Fechar</button>
-    <button mat-raised-button *ngIf="data.isEdit === true" class="btn-secondary" (click)="onClose()" >Cancelar</button>
-    <button mat-raised-button *ngIf="data.isEdit === true" (click)="saveEdit()" class="btn-primary">Salvar</button>
+    <button mat-raised-button *ngIf="data.isEdit === false" class="btn-primary" (click)="onClickClose()">Fechar</button>
+    <button mat-raised-button *ngIf="data.isEdit === true" class="btn-secondary" (click)="onClickClose()">Cancelar</button>
+    <button mat-raised-button *ngIf="data.isEdit === true" (click)="onClickSave()" class="btn-primary">Salvar</button>
 </div>

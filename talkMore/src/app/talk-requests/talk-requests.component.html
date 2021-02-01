@@ -64,7 +64,10 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="15">
                     <mat-label>Data de Adesão</mat-label>
-                    <input matInput type="date" placeholder="" formControlName="accessionDate">
+                    <input matInput [matDatepicker]="pickerAccessionDate" placeholder="" formControlName="accessionDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerAccessionDate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerAccessionDate></mat-datepicker>
                     <mat-error *ngIf="newRequestForm.controls['accessionDate'].hasError('required')">
                         Data de adesão é <strong>obrigatória</strong>
                     </mat-error>

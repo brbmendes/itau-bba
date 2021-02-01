@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,31 +18,32 @@ import { TalkRequestsService } from './talk-requests.service';
   styleUrls: ['./talk-requests.component.sass']
 })
 export class TalkRequestsComponent implements OnInit {
-  _talkMorePlan: SelectOption[] = this.getTalkMorePlans();
+  _talkMorePlan: any[];
   _matDataSource: RequestModel[] = []
+  newRequestForm: FormGroup;
 
   displayedColumns: string[] = ['id', 'company', 'plan', 'tariff', 'minutes', 'planValue', 'accessionDate', 'sendDate', 'action'];
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  newRequestForm = this.fb.group({
-    company: [null, Validators.required],
-    cnpj: [null, Validators.required],
-    plan: [null, Validators.required],
-    tariff: [null, Validators.required],
-    minutes: [null, Validators.required],
-    planValue: [null, Validators.required],
-    accessionDate: [null, Validators.required],
-  });
-
   constructor(
     private fb: FormBuilder,
     private coolDialogs: NgxCoolDialogsService,
     private talkRequestsService: TalkRequestsService,
     private messageService: MessageService,
-    private detailModalComonent: DetailModalComponent,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog) {
+      this._talkMorePlan = ['FaleMais 30','FaleMais 60','FaleMais 120'];
+      this.newRequestForm = this.fb.group({
+        company: [null, Validators.required],
+        cnpj: [null, Validators.required],
+        plan: [null, Validators.required],
+        tariff: [null, Validators.required],
+        minutes: [null, Validators.required],
+        planValue: [null, Validators.required],
+        accessionDate: [null, Validators.required],
+      });
+     }
 
   ngOnInit(): void {
     this.GetRequests();
@@ -54,18 +55,6 @@ export class TalkRequestsComponent implements OnInit {
 
   getMinutes(minutes: number): string {
     return minutes.toString() + ' min';
-  }
-
-  getTalkMorePlans() {
-    let array: SelectOption[] = [];
-    Object.keys(TalkMorePlan).forEach((element) => {
-      if (isNaN(Number(element)) === false) {
-        var key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-        let plan: SelectOption = { value: key, label: key };
-        array.push(plan);
-      }
-    })
-    return array;
   }
 
   ConfirmAction(message: string, action) {
@@ -158,6 +147,10 @@ export class TalkRequestsComponent implements OnInit {
     const dialogRef = this.dialog.open(DetailModalComponent, {
       data: { isEdit, request },
       width: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.GetRequests();
     });
   }
 }

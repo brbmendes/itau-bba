@@ -39,6 +39,7 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { NgxMaskModule } from 'ngx-mask'
 import { NgxCoolDialogsModule } from 'ngx-cool-dialogs';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -109,6 +110,7 @@ registerLocaleData(localePt);
 			  prompt: "Informe"
 			}
 		  }),
+		MatNativeDateModule
 	],
 	providers: [
 		{provide: LOCALE_ID, useValue: 'pt-br'},

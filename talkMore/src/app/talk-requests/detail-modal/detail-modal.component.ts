@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Inject, Injectable, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GetEnumKeyByEnumValue } from 'src/app/shared/helpers/enum.helper';
-import { SelectOption } from 'src/app/shared/interface/selectOption';
-import { TalkMorePlan } from 'src/app/shared/utils/enum';
+import { Component, Inject, Injectable, Input, OnInit, } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
+import { MessageService } from 'src/app/shared/services/message.service';
 import { RequestModel } from '../models/requestModel';
 import { TalkRequestsService } from '../talk-requests.service';
 
@@ -17,66 +16,83 @@ import { TalkRequestsService } from '../talk-requests.service';
   styleUrls: ['./detail-modal.component.sass']
 })
 export class DetailModalComponent implements OnInit {
-  _talkMorePlan: SelectOption[] = this.getTalkMorePlans();
-  @Input() requestForm: FormGroup = this.fb.group({
-    empresa: this.fb.control(null),
-    cnpj: this.fb.control(null),
-    plano: this.fb.control(null),
-    tarifa: this.fb.control(null),
-    minutos: this.fb.control(null),
-    vplano: this.fb.control(null),
-    dateAdesao: this.fb.control(null),
-    dateEmissao: this.fb.control(null),
-  });;
-
+  _talkMorePlan: any[];
+  @Input() _requestForm: FormGroup
 
   constructor(
     private fb: FormBuilder,
-    private talkMoreService: TalkRequestsService,
+    private talkRequestsService: TalkRequestsService,
+    private messageService: MessageService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DetailModalComponent>,) { }
+    public dialogRef: MatDialogRef<DetailModalComponent>,
+    private coolDialogs: NgxCoolDialogsService) {
+      this._talkMorePlan = ['FaleMais 30','FaleMais 60','FaleMais 120'];
+      this._requestForm = this.fb.group({
+        empresa: this.fb.control(null, [Validators.required]),
+        cnpj: this.fb.control(null, [Validators.required]),
+        plano: this.fb.control(null, [Validators.required]),
+        tarifa: this.fb.control(null, [Validators.required]),
+        minutos: this.fb.control(null, [Validators.required]),
+        vplano: this.fb.control(null, [Validators.required]),
+        dateAdesao: this.fb.control(null, [Validators.required]),
+        dateEmissao: this.fb.control(null),
+        id: this.fb.control(null),
+        _id: this.fb.control(null),
+      });
+     }
 
   ngOnInit(): void {
-    
-    
+    this._requestForm.controls.empresa.setValue(this.data.request.empresa);
+    this._requestForm.controls.cnpj.setValue(this.data.request.cnpj);
+    this._requestForm.controls.plano.setValue(this.data.request.plano);
+    this._requestForm.controls.tarifa.setValue(this.data.request.tarifa);
+    this._requestForm.controls.minutos.setValue(this.data.request.minutos);
+    this._requestForm.controls.vplano.setValue(this.data.request.vplano);
+    this._requestForm.controls.dateAdesao.setValue(this.data.request.dateAdesao);
+    this._requestForm.controls.dateEmissao.setValue(this.data.request.dateEmissao);
+    this._requestForm.controls._id.setValue(this.data.request._id);
+    this._requestForm.controls.id.setValue(this.data.request.id);
   }
 
-  openDialog(request: any, isEdit: string): void {
-    
-
-    this.requestForm.controls.empresa.patchValue(request.empresa);
-    // this.requestForm.controls.cnpj.setValue(request.cnpj);
-    // this.requestForm.controls.plano.setValue(request.plano);
-    // this.requestForm.controls.tarifa.setValue(request.tarifa);
-    // this.requestForm.controls.minutos.setValue(request.minutos);
-    // this.requestForm.controls.vplano.setValue(request.vplano);
-    // this.requestForm.controls.dateAdesao.setValue(request.dateAdesao);
-    // this.requestForm.controls.dateEmissao.setValue(request.dateEmissao);
-
-    // this.dialog.open(DetailModalComponent, {
-    //   width: '100%',
-    //   data: { request, isEdit }
-    // });
-    
+  ConfirmAction(message: string, action) {
+    this.coolDialogs.confirm(message)
+      .subscribe(response => {
+        if (response) {
+          action();
+        }
+      });
   }
-
-  onClose(): void {
+  
+  onClickClose(): void {
     this.dialogRef.close();
   }
 
-  getPlano(){
-    return "eas";
+  onClickSave(){
+    if (!this._requestForm.valid) {
+      return;
+    }
+    this.ConfirmAction("Deseja confirmar a operação?", () => this.UpdateRequest());
   }
 
-  getTalkMorePlans() {
-    let array: SelectOption[] = [];
-    Object.keys(TalkMorePlan).forEach((element) => {
-      if (isNaN(Number(element)) === false) {
-        var key = GetEnumKeyByEnumValue(TalkMorePlan, element);
-        let plan: SelectOption = { value: element, label: key };
-        array.push(plan);
+  UpdateRequest(){
+    let request: RequestModel = {
+      id: this._requestForm.controls.id.value,
+      _id: this._requestForm.controls._id.value,
+      empresa: this._requestForm.controls.empresa.value,
+      cnpj: this._requestForm.controls.cnpj.value,
+      plano: this._requestForm.controls.plano.value,
+      tarifa: this._requestForm.controls.tarifa.value,
+      minutos: this._requestForm.controls.minutos.value,
+      vplano: this._requestForm.controls.vplano.value,
+      dateAdesao: new Date(this._requestForm.controls.dateAdesao.value),
+      dateEmissao: new Date(),
+    };
+
+    this.talkRequestsService.UpdateRequest(request._id, request).subscribe((response) => {
+      if (response) {
+        this.messageService.showMessage('Solicitação atualizada com sucesso', 3);
+        this.onClickClose();
       }
-    })
-    return array;
+    });
   }
 }
