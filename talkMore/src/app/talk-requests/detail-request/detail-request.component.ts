@@ -11,11 +11,11 @@ import { TalkRequestsService } from '../talk-requests.service';
 })
 
 @Component({
-  selector: 'app-detail-modal',
-  templateUrl: './detail-modal.component.html',
-  styleUrls: ['./detail-modal.component.sass']
+  selector: 'app-detail-request',
+  templateUrl: './detail-request.component.html',
+  styleUrls: ['./detail-request.component.sass']
 })
-export class DetailModalComponent implements OnInit {
+export class DetailRequestComponent implements OnInit {
   _talkMorePlan: any[];
   @Input() _requestForm: FormGroup
 
@@ -24,7 +24,7 @@ export class DetailModalComponent implements OnInit {
     private talkRequestsService: TalkRequestsService,
     private messageService: MessageService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DetailModalComponent>,
+    public dialogRef: MatDialogRef<DetailRequestComponent>,
     private coolDialogs: NgxCoolDialogsService) {
       this._talkMorePlan = ['FaleMais 30','FaleMais 60','FaleMais 120'];
       this._requestForm = this.fb.group({

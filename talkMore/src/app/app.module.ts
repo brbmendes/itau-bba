@@ -47,7 +47,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { TalkRequestsComponent } from './talk-requests/talk-requests.component';
 import { HeaderComponent } from './shared/header/header.component';
-import { DetailModalComponent } from './talk-requests/detail-modal/detail-modal.component';
+import { DetailRequestComponent } from './talk-requests/detail-request/detail-request.component';
 
 registerLocaleData(localePt);
 
@@ -57,7 +57,7 @@ registerLocaleData(localePt);
 		LoginComponent,
 		TalkRequestsComponent,
 		HeaderComponent,
-		DetailModalComponent,
+		DetailRequestComponent,
 	],
 	imports: [
 		HttpClientModule,

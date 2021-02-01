@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxCoolDialogsService } from 'ngx-cool-dialogs';
 import { MessageService } from '../shared/services/message.service';
-import { DetailModalComponent } from './detail-modal/detail-modal.component';
+import { DetailRequestComponent } from './detail-request/detail-request.component';
 import { RequestModel } from './models/requestModel';
 import { TalkRequestsService } from './talk-requests.service';
 
@@ -142,7 +142,7 @@ export class TalkRequestsComponent implements OnInit {
   }
 
   onClickDetails(request: any, isEdit: boolean ){
-    const dialogRef = this.dialog.open(DetailModalComponent, {
+    const dialogRef = this.dialog.open(DetailRequestComponent, {
       data: { isEdit, request },
       width: '100%'
     });
