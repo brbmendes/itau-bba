@@ -29,8 +29,8 @@
                     <mat-label>Plano</mat-label>
                     <mat-select formControlName="plan">
                         <mat-option>Selecione</mat-option>
-                        <mat-option *ngFor="let plan of _talkMorePlan" [value]="plan.label">
-                            {{plan.label}}
+                        <mat-option *ngFor="let plan of _talkMorePlan" [value]="plan">
+                            {{plan}}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="newRequestForm.controls['plan'].hasError('required')">
