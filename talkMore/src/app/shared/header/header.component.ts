@@ -14,8 +14,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    // reset login status
-    // this.loginService.logout();
+    this.messageService.showMessage("Feature não disponível na versão 1.0", 5)
   }
 
   showAjuda(){
