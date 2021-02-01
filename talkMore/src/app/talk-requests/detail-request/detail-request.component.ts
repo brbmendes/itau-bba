@@ -81,9 +81,9 @@ export class DetailRequestComponent implements OnInit {
       empresa: this._requestForm.controls.empresa.value,
       cnpj: this._requestForm.controls.cnpj.value,
       plano: this._requestForm.controls.plano.value,
-      tarifa: this._requestForm.controls.tarifa.value,
+      tarifa: this._requestForm.controls.tarifa.value.replace(',','.'),
       minutos: this._requestForm.controls.minutos.value,
-      vplano: this._requestForm.controls.vplano.value,
+      vplano: this._requestForm.controls.vplano.value.replace(',','.'),
       dateAdesao: new Date(this._requestForm.controls.dateAdesao.value),
       dateEmissao: new Date(),
     };
