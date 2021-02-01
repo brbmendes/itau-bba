@@ -121,6 +121,7 @@ export class TalkRequestsComponent implements OnInit {
         this._matDataSource.push(tableLine);
       });
       this.dataSource = new MatTableDataSource<RequestModel>(this._matDataSource);
+      this.dataSource.paginator = this.paginator;
     });
   }
 

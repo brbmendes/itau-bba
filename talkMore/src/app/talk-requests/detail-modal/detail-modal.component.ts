@@ -45,9 +45,9 @@ export class DetailModalComponent implements OnInit {
     this._requestForm.controls.empresa.setValue(this.data.request.empresa);
     this._requestForm.controls.cnpj.setValue(this.data.request.cnpj);
     this._requestForm.controls.plano.setValue(this.data.request.plano);
-    this._requestForm.controls.tarifa.setValue(this.data.request.tarifa);
+    this._requestForm.controls.tarifa.setValue(this.data.request.tarifa.replace('.',','));
     this._requestForm.controls.minutos.setValue(this.data.request.minutos);
-    this._requestForm.controls.vplano.setValue(this.data.request.vplano);
+    this._requestForm.controls.vplano.setValue(this.data.request.vplano.replace('.',','));
     this._requestForm.controls.dateAdesao.setValue(this.data.request.dateAdesao);
     this._requestForm.controls.dateEmissao.setValue(this.data.request.dateEmissao);
     this._requestForm.controls._id.setValue(this.data.request._id);
